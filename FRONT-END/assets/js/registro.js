@@ -1,40 +1,53 @@
-document.getElementById('registerForm').addEventListener('submit', function (event) {
-    event.preventDefault(); // Prevenir el envío por defecto del formulario
+document.addEventListener('DOMContentLoaded', () => {
+    const registerForm = document.getElementById('registerForm');
 
-    // Obtener datos del formulario
-    const nombre = document.getElementById('nombre').value;
-    const apellidoP = document.getElementById('apellidoP').value;
-    const apellidoM = document.getElementById('apellidoM').value;
-    const fechaNacimiento = document.getElementById('fechaNacimiento').value;
-    const username = document.getElementById('username').value;
-    const correo = document.getElementById('correo').value;
-    const password = document.getElementById('password').value;
+    registerForm.addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevenir comportamiento por defecto del formulario
 
-    // Crear objeto con los datos del usuario
-    const userData = {
-        nombre: nombre,
-        apellidoP: apellidoP,
-        apellidoM: apellidoM,
-        fecha_nacimiento: fechaNacimiento,
-        nombre_usuario: username,
-        correo: correo,
-        contrasenia: password
-    };
+        // Obtener valores de los campos del formulario
+        const nombre = document.getElementById('nombre').value;
+        const apellidoP = document.getElementById('apellidoP').value;
+        const apellidoM = document.getElementById('apellidoM').value;
+        const fechaNacimiento = document.getElementById('fechaNacimiento').value;
+        const username = document.getElementById('username').value;
+        const correo = document.getElementById('correo').value;
+        const password = document.getElementById('password').value;
 
-    // Ejemplo de cómo enviar los datos del usuario a través de una solicitud fetch
-    fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Registro exitoso:', data);
-        // Aquí puedes redirigir al usuario a la página de inicio de sesión u otra página
-    })
-    .catch(error => {
-        console.error('Error en el registro:', error);
+        // Objeto con los datos del nuevo usuario a registrar
+        const newUser = {
+            nombre,
+            apellidoP,
+            apellidoM,
+            fecha_nacimiento: fechaNacimiento,
+            nombre_usuario: username,
+            correo,
+            contrasenia: password
+        };
+
+        try {
+            // Enviar datos al servidor usando fetch
+            const response = await fetch('http://localhost:3001/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newUser),
+                mode: 'cors', // Establecer el modo CORS en 'cors'
+                credentials: 'same-origin' // Usar las credenciales de origen para la solicitud
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                alert(data.message); // Mostrar mensaje de registro exitoso
+
+                // Redirigir al usuario a otra página después de registrarse
+                window.location.href = '../../auth/login.html'; // Cambiar a la página deseada
+            } else {
+                throw new Error('Error al registrar usuario');
+            }
+        } catch (error) {
+            console.error('Error al registrar usuario:', error);
+            alert('Error al registrar usuario. Por favor, intenta nuevamente.');
+        }
     });
 });
