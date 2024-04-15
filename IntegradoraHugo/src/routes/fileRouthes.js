@@ -1,8 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const cors = require('cors');
 const { ObjectId } = require("mongodb");
 const multer = require("multer");
 const fs = require("fs");
+
+router.use(cors()); // Usar CORS en este router
 
 // Crea una nueva instancia de ObjectId
 const objectId = new ObjectId();
@@ -66,7 +69,7 @@ router.delete("/eliminar/:archivoId", async (req, res) => {
 
     const archivos = database.collection("archivo");
 
-    // Busca el archivo en la base de datos
+    // Buscar el archivo en la base de datos
     const archivo = await archivos.findOne({ _id: new ObjectId(archivoId) });
     if (!archivo) {
       return res.status(404).send({ message: "Archivo no encontrado" });
@@ -76,14 +79,19 @@ router.delete("/eliminar/:archivoId", async (req, res) => {
     await archivos.deleteOne({ _id: new ObjectId(archivoId) });
 
     // Eliminar el archivo del sistema de archivos
-    fs.unlinkSync(archivo.ruta);
-
-    res.status(200).send({ message: "Archivo eliminado correctamente" });
+    const rutaArchivo = archivo.ruta;
+    if (fs.existsSync(rutaArchivo)) {
+      fs.unlinkSync(rutaArchivo);
+      res.status(200).send({ message: "Archivo eliminado correctamente" });
+    } else {
+      res.status(404).send({ message: "Archivo no encontrado en el sistema de archivos" });
+    }
   } catch (error) {
-    console.error("Error al eliminar archivo:", error);
-    res.status(500).send({ message: "Error interno del servidor" });
+    console.error('Error al eliminar archivo:', error);
+    res.status(500).send({ message: 'Error interno del servidor' });
   }
 });
+
 // Metodo para descargar archivo
 router.get("/descargar/:archivoId", async (req, res) => {
   try {
@@ -107,5 +115,22 @@ router.get("/descargar/:archivoId", async (req, res) => {
       .send({ message: "Error interno del servidor", error: error.message });
   }
 });
+
+router.get("/listar", async (req, res) => {
+  try {
+    const database = req.db;
+    const archivos = database.collection("archivo");
+
+    // Busca todos los archivos en la base de datos
+    const listaArchivos = await archivos.find().toArray();
+
+    // Retorna la lista de archivos al cliente
+    res.status(200).send(listaArchivos);
+  } catch (error) {
+    console.error("Error al obtener la lista de archivos:", error);
+    res.status(500).send({ message: "Error interno del servidor" });
+  }
+});
+
 
 module.exports = router;

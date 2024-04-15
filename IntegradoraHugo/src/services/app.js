@@ -10,7 +10,7 @@ app.use(express.json());
 
 app.use(cors({
     origin: 'http://127.0.0.1:5500',
-    methods: ['GET', 'POST'] // Permitir métodos GET y POST desde el origen especificado
+    methods: ['GET', 'POST','PUT','DELETE'] // Permitir métodos GET y POST desde el origen especificado
 }));
 
 
