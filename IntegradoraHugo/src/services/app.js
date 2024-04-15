@@ -3,6 +3,7 @@ const cors = require('cors'); // Importa el middleware cors
 const app = express();
 const authRoutes = require('../routes/authRoutes');
 const { connect } = require('../config/database')
+const fileRouthes = require('../routes/fileRouthes');
 require('../config/database');
 
 app.use(express.json());
@@ -23,8 +24,9 @@ app.use(async (req, res, next) => {
     }
 });
 
-
 app.use('/api/auth', authRoutes);
+app.use("/api/file", fileRouthes);
+
 const PORT = process.env.PORT || 3001;
 
 app.get('/', (req, res) => {
