@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // Enviar la solicitud POST a la ruta de inicio de sesión en tu servidor
-            const response = await fetch('http://localhost:3001/api/auth/signin', {
+            const response = await fetch('http://Integradorahugoback-env.eba-3p3cvtjy.us-east-1.elasticbeanstalk.com/api/auth/signin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(data.message); // Mostrar mensaje de inicio de sesión exitoso
 
                 // Redirigir a index.html después de iniciar sesión exitosamente
-                window.location.href = '../../auth/index.html';
+                window.location.href = '../../auth/principal.html';
             } else if (response.status === 404) {
                 throw new Error('Credenciales inválidas');
             } else {

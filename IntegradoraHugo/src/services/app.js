@@ -8,14 +8,11 @@ require("../config/database");
 
 const app = express();
 
+app.use(cors());
+
 app.use(express.json());
 
-app.use(
-  cors({
-    origin: "http://127.0.0.1:5500",
-    methods: ["GET", "POST", "PUT", "DELETE"], // Permitir métodos GET y POST desde el origen especificado
-  })
-);
+
 
 // Middleware para verificar y decodificar el token JWT
 function verificarToken(req, res, next) {

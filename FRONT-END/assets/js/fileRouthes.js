@@ -9,7 +9,7 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
     formData.append('archivo', fileInput.files[0]);
 
     try {
-        const response = await fetch('http://localhost:3001/api/file/subir', {
+        const response = await fetch('http://Integradorahugoback-env.eba-3p3cvtjy.us-east-1.elasticbeanstalk.com/api/file/subir', {
             method: 'POST',
             body: formData
         });
@@ -30,7 +30,7 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
 // Función para eliminar un archivo por su ID
 async function eliminarArchivo(archivoId) {
     try {
-        const response = await fetch(`http://localhost:3001/api/file/eliminar/${archivoId}`, {
+        const response = await fetch(`http://Integradorahugoback-env.eba-3p3cvtjy.us-east-1.elasticbeanstalk.com/api/file/eliminar/${archivoId}`, {
             method: 'DELETE'
         });
 
@@ -50,7 +50,7 @@ async function eliminarArchivo(archivoId) {
 // Función para descargar un archivo por su ID
 async function descargarArchivo(archivoId) {
     try {
-        const response = await fetch(`http://localhost:3001/api/file/descargar/${archivoId}`);
+        const response = await fetch(`http://Integradorahugoback-env.eba-3p3cvtjy.us-east-1.elasticbeanstalk.com/api/file/descargar/${archivoId}`);
 
         if (response.ok) {
             // Descarga el archivo en el navegador

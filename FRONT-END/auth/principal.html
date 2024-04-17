@@ -135,7 +135,7 @@
         formData.append("archivo", fileInput.files[0]);
 
         try {
-          const response = await fetch("http://localhost:3001/api/file/subir", {
+          const response = await fetch("http://Integradorahugoback-env.eba-3p3cvtjy.us-east-1.elasticbeanstalk.com/api/file/subir", {
             method: "POST",
             body: formData,
             headers: {
@@ -159,7 +159,7 @@
       async function eliminarArchivo(archivoId) {
         try {
           const response = await fetch(
-            `http://localhost:3001/api/file/eliminar/${archivoId}`,
+            `http://Integradorahugoback-env.eba-3p3cvtjy.us-east-1.elasticbeanstalk.com/api/file/eliminar/${archivoId}`,
             {
               method: "DELETE",
               headers: {
@@ -184,7 +184,7 @@
       async function descargarArchivo(archivoId) {
         try {
           const response = await fetch(
-            `http://localhost:3001/api/file/descargar/${archivoId}`,
+            `http://Integradorahugoback-env.eba-3p3cvtjy.us-east-1.elasticbeanstalk.com/api/file/descargar/${archivoId}`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`, // Agregar el token JWT en los headers
@@ -233,7 +233,7 @@
       async function actualizarTablaArchivos() {
         try {
           const response = await fetch(
-            "http://localhost:3001/api/file/listar",
+            "http://Integradorahugoback-env.eba-3p3cvtjy.us-east-1.elasticbeanstalk.com/api/file/listar",
             {
               method: "GET",
               headers: {
