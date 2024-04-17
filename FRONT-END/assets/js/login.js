@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Agregar un evento de escucha para el envío del formulario
     loginForm.addEventListener('submit', async (event) => {
-        event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
+        // Prevenir el comportamiento predeterminado del formulario
+        event.preventDefault();
 
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
@@ -29,10 +30,16 @@ document.addEventListener('DOMContentLoaded', () => {
             // Verificar el código de estado de la respuesta
             if (response.ok) {
                 const data = await response.json();
-                alert(data.message); // Mostrar mensaje de inicio de sesión exitoso
-
-                // Redirigir a index.html después de iniciar sesión exitosamente
-                window.location.href = '../../auth/principal.html';
+                // Mostrar mensaje de inicio de sesión exitoso con SweetAlert2
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Inicio de sesión exitosa!',
+                    showConfirmButton: false, // Sin botón de confirmación
+                    timer: 1800 // Se cerrará automáticamente después de 5 segundos
+                }).then(() => {
+                    // Redirigir a index.html después de iniciar sesión exitosamente
+                    window.location.href = '../../auth/principal.html';
+                });
             } else if (response.status === 404) {
                 throw new Error('Credenciales inválidas');
             } else {
@@ -40,7 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (error) {
             console.error('Error al iniciar sesión:', error);
-            alert('Error al iniciar sesión. Por favor, intenta nuevamente.');
+            // Mostrar mensaje de error con SweetAlert2
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error al iniciar sesión',
+                text: 'Por favor, intenta nuevamente.'
+            });
         }
     });
 });

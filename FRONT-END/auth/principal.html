@@ -134,49 +134,57 @@
         const formData = new FormData();
         formData.append("archivo", fileInput.files[0]);
 
-        try {
-          const response = await fetch("http://Integradorahugoback-env.eba-3p3cvtjy.us-east-1.elasticbeanstalk.com/api/file/subir", {
-            method: "POST",
-            body: formData,
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`, // Agregar el token JWT en los headers
-            },
-          });
+        // Mostrar alerta de confirmación antes de subir el archivo
+        const result = await confirmAction("¿Estás seguro de subir este archivo?");
+        if (result.isConfirmed) {
+          try {
+            const response = await fetch("http://Integradorahugoback-env.eba-3p3cvtjy.us-east-1.elasticbeanstalk.com/api/file/subir", {
+              method: "POST",
+              body: formData,
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`, // Agregar el token JWT en los headers
+              },
+            });
 
-          if (response.ok) {
-            mostrarAlertaExito("Archivo subido correctamente");
-            await actualizarTablaArchivos();
-          } else {
-            throw new Error("Error al subir archivo");
+            if (response.ok) {
+              mostrarAlertaExito("Archivo subido correctamente");
+              await actualizarTablaArchivos();
+            } else {
+              throw new Error("Error al subir archivo");
+            }
+          } catch (error) {
+            console.error("Error al subir archivo:", error);
+            mostrarAlertaError("Error al subir archivo");
           }
-        } catch (error) {
-          console.error("Error al subir archivo:", error);
-          mostrarAlertaError("Error al subir archivo");
         }
       }
 
       // Función para eliminar un archivo por su ID
       async function eliminarArchivo(archivoId) {
-        try {
-          const response = await fetch(
-            `http://Integradorahugoback-env.eba-3p3cvtjy.us-east-1.elasticbeanstalk.com/api/file/eliminar/${archivoId}`,
-            {
-              method: "DELETE",
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`, // Agregar el token JWT en los headers
-              },
-            }
-          );
+        // Mostrar alerta de confirmación antes de eliminar el archivo
+        const result = await confirmAction("¿Estás seguro de eliminar este archivo?");
+        if (result.isConfirmed) {
+          try {
+            const response = await fetch(
+              `http://Integradorahugoback-env.eba-3p3cvtjy.us-east-1.elasticbeanstalk.com/api/file/eliminar/${archivoId}`,
+              {
+                method: "DELETE",
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`, // Agregar el token JWT en los headers
+                },
+              }
+            );
 
-          if (response.ok) {
-            mostrarAlertaExito("Archivo eliminado correctamente");
-            await actualizarTablaArchivos();
-          } else {
-            throw new Error("Error al eliminar archivo");
+            if (response.ok) {
+              mostrarAlertaExito("Archivo eliminado correctamente");
+              await actualizarTablaArchivos();
+            } else {
+              throw new Error("Error al eliminar archivo");
+            }
+          } catch (error) {
+            console.error("Error al eliminar archivo:", error);
+            mostrarAlertaError("Error al eliminar archivo");
           }
-        } catch (error) {
-          console.error("Error al eliminar archivo:", error);
-          mostrarAlertaError("Error al eliminar archivo");
         }
       }
 
@@ -229,6 +237,19 @@
         });
       }
 
+      // Función para mostrar una alerta de confirmación
+      const confirmAction = async (message) => {
+        const result = await Swal.fire({
+          icon: 'question',
+          title: '¿Estas Seuguro?',
+          text: message,
+          showCancelButton: true,
+          confirmButtonText: 'Sí',
+          cancelButtonText: 'Cancelar'
+        });
+        return result;
+      };
+
       // Función para actualizar la tabla de archivos
       async function actualizarTablaArchivos() {
         try {
@@ -279,7 +300,7 @@
           icon: "info",
           title: "Sesión cerrada correctamente",
           showConfirmButton: false,
-          timer: 1500,
+          timer: 1400,
           timerProgressBar: true,
         }).then(() => {
           localStorage.removeItem("token"); // Eliminar el token JWT del almacenamiento local

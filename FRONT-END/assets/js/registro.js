@@ -38,7 +38,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
                 const data = await response.json();
-                alert(data.message); // Mostrar mensaje de registro exitoso
+                // Mostrar mensaje de registro exitoso con SweetAlert2
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Registro exitoso',
+                    text: data.message,
+                    showConfirmButton: false,
+                    timer: 1500 // Cerrar automáticamente después de 1.5 segundos
+                });
 
                 // Redirigir al usuario a otra página después de registrarse
                 window.location.href = '../../auth/login.html'; // Cambiar a la página deseada
@@ -47,7 +54,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (error) {
             console.error('Error al registrar usuario:', error);
-            alert('Error al registrar usuario. Por favor, intenta nuevamente.');
+            // Mostrar mensaje de error con SweetAlert2
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error al registrar usuario',
+                text: 'Por favor, intenta nuevamente.'
+            });
         }
     });
 });

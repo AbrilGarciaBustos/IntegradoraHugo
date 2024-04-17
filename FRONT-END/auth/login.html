@@ -172,7 +172,6 @@
               const data = await response.json();
               // Almacena el token JWT en el almacenamiento local del navegador
               localStorage.setItem("token", data.token);
-              mostrarAlertaExito(data.message); // Mostrar mensaje de éxito con SweetAlert2
             } else if (response.status === 404) {
               mostrarAlertaUsuarioIncorrecto();
             } else if (response.status === 401) {
